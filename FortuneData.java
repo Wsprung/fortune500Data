@@ -117,29 +117,22 @@ public class FortuneData {
 
   private static ArrayList<String> getCompaniesNA() throws FileNotFoundException {
     resetScannerSetUp(LEADERS500);
-//Working on this method
     ArrayList<String> companiesNA = new ArrayList<>();
 
     while(LEADERS500_SC.hasNextLine()) {
       String[] nextLineOfFileS = nextLineOfFile();
       if(nextLineOfFileS == null) { break; }
       boolean b = true;
+      //Does the current array have an industry NA?
       if(nextLineOfFileS[columnTitles.indexOf("industry")].equals("NA")) {
-        for (int i = 0; i < companiesNA.size(); i++) {
-            if (companiesNA.get(i).equals(nextLineOfFileS[columnTitles.indexOf("corp.name")])) {
-                b = false;
-              }
-            }
-            if (b) {
-              companiesNA.add(nextLineOfFileS[columnTitles.indexOf("corp.name")]);
-            }
+      //If yes, iterate through companiesNA, and see if the company name of the array is already in companiesNA, if not, add it
+      for (int i = 0; i < companiesNA.size(); i++) {
+          if (companiesNA.get(i).equals(nextLineOfFileS[columnTitles.indexOf("corp.name")])) { b = false; }
       }
-      return companiesNA;
+      if (b) { companiesNA.add(nextLineOfFileS[columnTitles.indexOf("corp.name")]); }
+    }
   }
-
-
-
-  return companiesNA;
+ return companiesNA;
 }
 
   //Which industry of company’s CEOs/directors donate the most/least total money to republicans/democrats?
@@ -192,8 +185,20 @@ for(int i = 0; i < totalDems.length; i++) {
      indexR = i;
    }
 }
-   toRet[0] = new IndustryDonations(IndustryDonations.industryNames.get(indexD), totalDems[indexD], totalReps[indexD]);
-   toRet[1] = new IndustryDonations(IndustryDonations.industryNames.get(indexR), totalDems[indexR], totalReps[indexR]);
+
+toRet[0] = new IndustryDonations(IndustryDonations.industryNames.get(indexD), totalDems[indexD], totalReps[indexD]);
+toRet[1] = new IndustryDonations(IndustryDonations.industryNames.get(indexR), totalDems[indexR], totalReps[indexR]);
+
+//Finding and printing the second largest value in the totalDems array, since the largest donation total came from "NA" industry, so I wanted to find a more specific answer
+max = totalDems[0];
+indexR = 0;
+for(int i = 0; i < totalDems.length; i++) {
+   if(max < totalDems[i] && i!=33) {
+     max = totalDems[i];
+     indexD = i;
+   }
+}
+System.out.println("The second highest Democrat contribution total was: " + max + " from the " + IndustryDonations.industryNames.get(indexD) + " industry.");
 
 //I found that the largest donors to republicans were a part of the "NA" industry, which just includes some misc. companies like Eastman Kodak
 //To still create some valuable data, I wanted to find the smallest donating industry as well, to add some perspective, these industries are index 2 and 3 of toRet
@@ -207,22 +212,21 @@ for(int i = 0; i < totalDems.length; i++) {
     }
  }
 min = totalReps[0];
-System.out.println("IDM" + indexDMin);
 int indexRMin = 0;
-System.out.println("IRM" + indexRMin);
 for(int i = 0; i < totalDems.length; i++) {
    if(min > totalReps[i]) {
      min = totalReps[i];
      indexRMin = i;
    }
 }
-System.out.println("IRM" + indexRMin);
 
   toRet[2] = new IndustryDonations(IndustryDonations.industryNames.get(indexDMin), totalDems[indexDMin], totalReps[indexDMin]);
   toRet[3] = new IndustryDonations(IndustryDonations.industryNames.get(indexRMin), totalDems[indexRMin], totalReps[indexRMin]);
 
    System.out.println("Number of leaders working for company's in NA industry: " + numIndustry(iDAL, "NA"));
-   System.out.println("Number of leaders working for company's in Computer Hardware industry: " + numIndustry(iDAL, "Computer Hardware"));
+   System.out.println("Number of leaders working for company's in the Computer Hardware industry: " + numIndustry(iDAL, "Computer Hardware"));
+   System.out.println("Number of leaders working for company's in the Electric Utilities industry: " + numIndustry(iDAL, "Electric Utilities"));
+
    return toRet;
    }
 
@@ -231,6 +235,5 @@ System.out.println("IRM" + indexRMin);
     int[][] numMaleFemale = countGender();
     System.out.println(Arrays.deepToString(numMaleFemale));
     System.out.println(Arrays.toString(totalIndustryDonations()));
-    System.out.println(getCompaniesNA());
   }
 }
