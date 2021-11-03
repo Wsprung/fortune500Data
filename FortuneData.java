@@ -105,11 +105,48 @@ public class FortuneData {
   return maleVsFemale;
   }
 
-  //Which industry of company’s CEOs/directors donate the most total money to republicans/democrats?
-   public static ArrayList<IndustryDonations> totalIndustryDonations() throws FileNotFoundException {
+  //Find how many occurences there are of donations under an "NA" industry
+  private static int numIndustry(ArrayList<IndustryDonations> iDAL, String indName) {
+    int count = 0;
+    //index of NA in IndustryDonations.industryNames is 33
+    for(int i = 0; i < iDAL.size(); i++) {
+      if(iDAL.get(i).industry.equals(indName)) { count++; }
+    }
+    return count;
+  }
+
+  private static ArrayList<String> getCompaniesNA() throws FileNotFoundException {
+    resetScannerSetUp(LEADERS500);
+//Working on this method
+    ArrayList<String> companiesNA = new ArrayList<>();
+
+    while(LEADERS500_SC.hasNextLine()) {
+      String[] nextLineOfFileS = nextLineOfFile();
+      if(nextLineOfFileS == null) { break; }
+      boolean b = true;
+      if(nextLineOfFileS[columnTitles.indexOf("industry")].equals("NA")) {
+        for (int i = 0; i < companiesNA.size(); i++) {
+            if (companiesNA.get(i).equals(nextLineOfFileS[columnTitles.indexOf("corp.name")])) {
+                b = false;
+              }
+            }
+            if (b) {
+              companiesNA.add(nextLineOfFileS[columnTitles.indexOf("corp.name")]);
+            }
+      }
+      return companiesNA;
+  }
+
+
+
+  return companiesNA;
+}
+
+  //Which industry of company’s CEOs/directors donate the most/least total money to republicans/democrats?
+   public static IndustryDonations[] totalIndustryDonations() throws FileNotFoundException {
      resetScannerSetUp(LEADERS500);
      ArrayList<IndustryDonations> iDAL= new ArrayList<>();
-     ArrayList<String> industryNames = IndustryDonations.industryNames;
+     IndustryDonations[] toRet = new IndustryDonations[4];
      double[] totalReps;
      double[] totalDems;
      String industry;
@@ -126,11 +163,11 @@ public class FortuneData {
        iDAL.add(new IndustryDonations(industry, totalDem, totalRep));
  //Get arraylist with every line equivalent ID OBJECT
  //Get arraylist with industryNames
- //Make paralell array and increment through arraylist of ID objects and increment each industry's total
+ //Make parallel array and increment through arraylist of ID objects and increment each industry's total
      }
 
-     totalDems = new double[industryNames.size()];
-     totalReps = new double[industryNames.size()];
+     totalDems = new double[IndustryDonations.industryNames.size()];
+     totalReps = new double[IndustryDonations.industryNames.size()];
      for(int i = 0; i < iDAL.size(); i++) {
        industry = iDAL.get(i).industry;
        int index = IndustryDonations.industryNames.indexOf(industry);
@@ -138,17 +175,62 @@ public class FortuneData {
        totalReps[index] = totalReps[index] + iDAL.get(i).totalRep;
      }
 
-     for(int i = 0; i < totalDems.length; i++) {
+//Finding the largest value in each array
+double max = totalDems[0];
+int indexD = 0;
+for(int i = 0; i < totalDems.length; i++) {
+    if(max < totalDems[i]) {
+      max = totalDems[i];
+      indexD = i;
+    }
+ }
+max = totalReps[0];
+int indexR = 0;
+for(int i = 0; i < totalDems.length; i++) {
+   if(max < totalReps[i]) {
+     max = totalReps[i];
+     indexR = i;
+   }
+}
+   toRet[0] = new IndustryDonations(IndustryDonations.industryNames.get(indexD), totalDems[indexD], totalReps[indexD]);
+   toRet[1] = new IndustryDonations(IndustryDonations.industryNames.get(indexR), totalDems[indexR], totalReps[indexR]);
 
-     }
+//I found that the largest donors to republicans were a part of the "NA" industry, which just includes some misc. companies like Eastman Kodak
+//To still create some valuable data, I wanted to find the smallest donating industry as well, to add some perspective, these industries are index 2 and 3 of toRet
+//Finding the smallest value in each array
+double min = totalDems[0];
+int indexDMin = 0;
+for(int i = 0; i < totalDems.length; i++) {
+    if(min > totalDems[i]) {
+      min = totalDems[i];
+      indexDMin = i;
+    }
+ }
+min = totalReps[0];
+System.out.println("IDM" + indexDMin);
+int indexRMin = 0;
+System.out.println("IRM" + indexRMin);
+for(int i = 0; i < totalDems.length; i++) {
+   if(min > totalReps[i]) {
+     min = totalReps[i];
+     indexRMin = i;
+   }
+}
+System.out.println("IRM" + indexRMin);
 
-     return iDAL;
+  toRet[2] = new IndustryDonations(IndustryDonations.industryNames.get(indexDMin), totalDems[indexDMin], totalReps[indexDMin]);
+  toRet[3] = new IndustryDonations(IndustryDonations.industryNames.get(indexRMin), totalDems[indexRMin], totalReps[indexRMin]);
+
+   System.out.println("Number of leaders working for company's in NA industry: " + numIndustry(iDAL, "NA"));
+   System.out.println("Number of leaders working for company's in Computer Hardware industry: " + numIndustry(iDAL, "Computer Hardware"));
+   return toRet;
    }
 
   public static void main(String[] args) throws FileNotFoundException {
     FortuneData test = new FortuneData();
     int[][] numMaleFemale = countGender();
     System.out.println(Arrays.deepToString(numMaleFemale));
-    totalIndustryDonations();
+    System.out.println(Arrays.toString(totalIndustryDonations()));
+    System.out.println(getCompaniesNA());
   }
 }
