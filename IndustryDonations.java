@@ -36,6 +36,6 @@ public class IndustryDonations
     }
 
     public String toString() {
-        return industry + ", " + "total amount contributed to Democrats: " + totalDem + "total amount contributed to Republicans: " + totalRep;
+        return "industry: " + industry + ", " + "total amount contributed to Democrats: " + totalDem + ", total amount contributed to Republicans: " + totalRep;
     }
   }

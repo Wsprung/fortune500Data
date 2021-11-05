@@ -1,7 +1,5 @@
 import java.util.*;
 import java.io.*;
-//WHEN DONE TESTING, CHANGE CLASS/STATIC METHODS TO NON-STATIC WHERE NEEDED
-//MOST METHODS CAN ONLY RUN ONCE AN OBJECT OF THIS FILE HAS BEEN MADE
 
 public class FortuneData {
   //Data is public, so it is OK if my attributes containing the data are too, so users can access them.
@@ -45,7 +43,7 @@ public class FortuneData {
   //returns an integer 2Darray with index 0 being number of male CEOs, chairmen, board members, and executive chairmen, and index 1 the number of female CEOs, chairmen, board members, and executive chairmen.
   public static int[][] countGender() throws FileNotFoundException {
     //At the end of countGender() and other methods, the Scanner is closed.
-    //Call resetScannerSetUp to assure that you have a running Scanner that is set to the write lines,
+    //Call resetScannerSetUp to assure that you have a running Scanner that is set to the right lines,
     //in case your Scanner was closed due to running other methods.
     resetScannerSetUp(LEADERS500);
 
@@ -59,7 +57,6 @@ public class FortuneData {
     int chairmanInd = 0;
     //{numMale, numMaleCEO, numMaleChairmen, numMaleBoardMembers, numMaleChairManAndCeo}
     //{numFemale, numFemaleCEO, numFemaleChairmen, numFemaleBoardMembers, numFemaleChairManAndCeo}
-
 
 
     //while loop to go through the file and count number of male and female leaders
@@ -115,7 +112,7 @@ public class FortuneData {
     return count;
   }
 
-  private static ArrayList<String> getCompaniesNA() throws FileNotFoundException {
+  public static ArrayList<String> getCompaniesNA() throws FileNotFoundException {
     resetScannerSetUp(LEADERS500);
     ArrayList<String> companiesNA = new ArrayList<>();
 
@@ -198,10 +195,10 @@ for(int i = 0; i < totalDems.length; i++) {
      indexD = i;
    }
 }
-System.out.println("The second highest Democrat contribution total was: " + max + " from the " + IndustryDonations.industryNames.get(indexD) + " industry.");
+System.out.println("The second highest Democrat contribution total was: " + max + " from the " + IndustryDonations.industryNames.get(indexD) + " industry. This industry contributed a total " + totalReps[indexD] + " to Republicans.");
 
-//I found that the largest donors to republicans were a part of the "NA" industry, which just includes some misc. companies like Eastman Kodak
-//To still create some valuable data, I wanted to find the smallest donating industry as well, to add some perspective, these industries are index 2 and 3 of toRet
+//I found that the largest donors to democrats were a part of the "NA" industry, which includes various companies like Eastman Kodak
+//To add perspective, I wanted to find the smallest donating industry to Republicans and Democrats, these industries are index 2 and 3 of toRet
 //Finding the smallest value in each array
 double min = totalDems[0];
 int indexDMin = 0;
@@ -223,17 +220,25 @@ for(int i = 0; i < totalDems.length; i++) {
   toRet[2] = new IndustryDonations(IndustryDonations.industryNames.get(indexDMin), totalDems[indexDMin], totalReps[indexDMin]);
   toRet[3] = new IndustryDonations(IndustryDonations.industryNames.get(indexRMin), totalDems[indexRMin], totalReps[indexRMin]);
 
-   System.out.println("Number of leaders working for company's in NA industry: " + numIndustry(iDAL, "NA"));
-   System.out.println("Number of leaders working for company's in the Computer Hardware industry: " + numIndustry(iDAL, "Computer Hardware"));
-   System.out.println("Number of leaders working for company's in the Electric Utilities industry: " + numIndustry(iDAL, "Electric Utilities"));
+   System.out.println("Number of leaders working for companies in NA industry: " + numIndustry(iDAL, "NA"));
+   System.out.println("Number of leaders working for companies in the Computer Hardware industry: " + numIndustry(iDAL, "Computer Hardware"));
+   System.out.println("Number of leaders working for companies in the Electric Utilities industry: " + numIndustry(iDAL, "Electric Utilities"));
+   System.out.println("Number of leaders working for companies in Computer Peripherals industry: " + numIndustry(iDAL, "Computer Peripherals"));
 
+
+  LEADERS500_SC.close();
    return toRet;
    }
 
   public static void main(String[] args) throws FileNotFoundException {
     FortuneData test = new FortuneData();
+    System.out.println("[totalMaleLeaders, maleCEOs, maleChairmen, maleBoardMembers, doubleCounted],[totalFemaleLeaders, femaleCEOs, femaleChairmen, femaleBoardMembers, doubleCounted]");
     int[][] numMaleFemale = countGender();
     System.out.println(Arrays.deepToString(numMaleFemale));
     System.out.println(Arrays.toString(totalIndustryDonations()));
+    //By the way the dataset was organized, some company names are listed with slight variations.
+    //As a result, the statement below prints a list with some repeats.
+    //Refer to my infographic to see the fixed list, which does not contain the repeats (ex. Berkshire Hatahway and Berkshire Hathaway)
+    System.out.println("Companies falling under the NA industry: " + getCompaniesNA());
   }
 }
