@@ -1,5 +1,5 @@
-Whitney Sprung
-November, 2021
+_Whitney Sprung_
+November, 2021 🐫
 
 # Avenues of Influence: On the Political Expenditures of Corporations and Their Directors and Executives
 
