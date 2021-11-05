@@ -3,7 +3,7 @@ November, 2021
 
 Avenues of Influence: On the Political Expenditures of Corporations and Their Directors and Executives 
  
- Methods
+##Methods
   Dataset: Describe what you know about how the data was generated. If possible, include information about who owns the dataset and why you are able to use it.
      The dataset was created by an Associate Professor in the Department of Political Science at Stanford University, Adam Bonica. He derived this data from publicly available information on executives and board members of Fortune 500 companies from DIME, the Database on Ideology, Money in Politics, and Elections. DIME contains over 130 million instances of political contributions made by individuals and organizations to local, state, and federal elections over a large time period. DIME was created using publicly accessible data from various sources, such as government websites and groups dedicated to transparency in politics. Advanced methods were used to collect and compile this data, and using R, Bonica created the dataset I analyzed that is smaller and more specific than DIME.
 
