@@ -1,6 +1,7 @@
 _Whitney Sprung_
 November, 2021
-##**Make sure to check out my infographic of results, https://wsprung.github.io/whitneysArchive/website/assets/FortuneDataSummaryPage.ai**
+
+### **Make sure to check out my infographic of results, https://wsprung.github.io/whitneysArchive/website/assets/FortuneDataSummaryPage.ai**
 
 # Avenues of Influence: On the Political Expenditures of Corporations and Their Directors and Executives
 
